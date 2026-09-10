@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MG CINEMATIC | World-Class Film Production & Direction</title>
+  
+  <!-- Google Fonts: Cinzel for high-fashion editorial serif, Plus Jakarta Sans & Space Grotesk for cinematic UI typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            noir: {
+              950: '#030304',
+              900: '#070709',
+              850: '#0c0d10',
+              800: '#121418',
+              700: '#1b1d24',
+              600: '#282b34'
+            },
+            anamorphic: {
+              cyan: '#00f2fe',
+              blue: '#4facfe',
+              gold: '#e6c670',
+              amber: '#f59e0b'
+            }
+          },
+          fontFamily: {
+            serif: ['Cinzel', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['Space Mono', 'monospace'],
+            display: ['Space Grotesk', 'sans-serif']
+          },
+          letterSpacing: {
+            ultra: '0.35em',
+            epic: '0.5em'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050507;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #252830;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #404552;
+    }
+
+    /* Cinematic Film Grain Overlay */
+    .film-grain {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 9990;
+      opacity: 0.038;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Anamorphic Horizon Flare Line */
+    .anamorphic-flare {
+      background: linear-gradient(90deg, transparent 0%, rgba(79, 172, 254, 0) 15%, rgba(0, 242, 254, 0.4) 50%, rgba(245, 158, 11, 0.3) 75%, transparent 100%);
+      filter: blur(1px);
+    }
+
+    /* Custom Cursor Styles */
+    @media (hover: hover) and (pointer: fine) {
+      body {
+        cursor: default;
+      }
+      .custom-cursor {
+        pointer-events: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 99999;
+        transform: translate(-50%, -50%);
+        transition: width 0.22s ease-out, height 0.22s ease-out, background-color 0.22s ease-out, border-color 0.22s ease-out;
+      }
+    }
+
+    /* Widescreen 2.39:1 Aspect Ratio helper */
+    .aspect-cinema {
+      aspect-ratio: 2.39 / 1;
+    }
+
+    /* Shimmer Effect for Cinema Badges */
+    @keyframes metallicShimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    .silver-metallic {
+      background: linear-gradient(110deg, #b0b4be 0%, #ffffff 28%, #8e94a0 45%, #ffffff 65%, #a4a9b5 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: metallicShimmer 10s linear infinite;
+    }
+
+    /* Hide standard range slider thumb */
+    input[type=range]::-webkit-slider-thumb {
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 3px solid #00f2fe;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.8);
+    }
+  </style>
+</head>
+
+<body class="bg-noir-950 text-neutral-200 font-sans antialiased selection:bg-cyan-500 selection:text-black overflow-x-hidden relative">
+
+  <!-- Grain Overlay -->
+  <div class="film-grain"></div>
+
+  <!-- Custom Cinematic Interactive Cursor Follower -->
+  <div id="cursor-dot" class="custom-cursor w-3 h-3 rounded-full bg-cyan-400 opacity-80 mix-blend-screen hidden md:block"></div>
+  <div id="cursor-ring" class="custom-cursor w-10 h-10 rounded-full border border-neutral-400/40 hidden md:flex items-center justify-center text-[9px] font-mono tracking-widest text-cyan-300 pointer-events-none transition-transform"></div>
+
+  <!-- Anamorphic Top Cinema Edge Glow -->
+  <div class="fixed top-0 left-0 w-full h-[2px] anamorphic-flare z-50 pointer-events-none"></div>
+
+  <!-- Top Cinema Navigation -->
+  <header class="fixed top-0 left-0 w-full z-40 bg-noir-950/85 backdrop-blur-md border-b border-neutral-900/80 transition-all duration-300" id="main-nav">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 sm:h-24 flex items-center justify-between">
+      
+      <!-- Brand Logo: Exact SVG translation of the MG CINEMATIC serif monogram -->
+      <a href="#" class="flex items-center gap-3 group focus:outline-none" aria-label="MG Cinematic Home">
+        <div class="relative flex flex-col items-center">
+          <!-- Monogram Emblem SVG -->
+          <div class="flex items-center justify-center">
+            <svg class="h-10 sm:h-12 w-auto transition-transform duration-500 group-hover:scale-105 filter drop-shadow-[0_2px_12px_rgba(255,255,255,0.15)]" viewBox="0 0 160 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Sharp Serif M with sharp apex slash that cuts dynamically -->
+              <path d="M12 76V18H28L52 56L76 18H92V76H76V34L54 70H50L28 34V76H12Z" fill="url(#silverGrad1)" />
+              <!-- Distinctive MG cutting slash that shoots upward like the user logo -->
+              <path d="M48 68L86 10L94 15L56 74L48 68Z" fill="url(#silverGrad2)" />
+              <!-- Majestic Serif G embracing the M -->
+              <path d="M135 22C122 17 106 18 94 26C80 35 74 52 78 67C82 80 96 90 114 90C128 90 142 84 148 76V48H112V60H132V68C127 74 118 78 108 77C97 76 89 68 87 58C84 46 91 34 102 29C110 25 120 25 128 29L135 22Z" fill="url(#silverGrad3)" />
+              <defs>
+                <linearGradient id="silverGrad1" x1="12" y1="18" x2="92" y2="76" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#FFFFFF" />
+                  <stop offset="0.5" stop-color="#E2E4E8" />
+                  <stop offset="1" stop-color="#9FA4AF" />
+                </linearGradient>
+                <linearGradient id="silverGrad2" x1="48" y1="10" x2="94" y2="74" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#FFFFFF" />
+                  <stop offset="1" stop-color="#B4B9C4" />
+                </linearGradient>
+                <linearGradient id="silverGrad3" x1="74" y1="17" x2="148" y2="90" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#FFFFFF" />
+                  <stop offset="0.6" stop-color="#D1D5DB" />
+                  <stop offset="1" stop-color="#888E99" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <!-- CINEMATIC text line matching the logo -->
+          <div class="flex items-center gap-1.5 mt-1">
+            <span class="w-3 h-[0.75px] bg-neutral-400"></span>
+            <span class="font-serif tracking-[0.42em] text-[8px] sm:text-[9.5px] uppercase text-neutral-200 font-medium translate-x-[1px]">CINEMATIC</span>
+            <span class="w-3 h-[0.75px] bg-neutral-400"></span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Items -->
+      <nav class="hidden md:flex items-center gap-8 font-mono text-[11px] tracking-widest text-neutral-400 uppercase">
+        <a href="#showreel" class="hover:text-cyan-400 transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-cyan-400 hover:after:w-full after:transition-all">Showreel</a>
+        <a href="#portfolio" class="hover:text-cyan-400 transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-cyan-400 hover:after:w-full after:transition-all">Selected Works</a>
+        <a href="#grading-suite" class="hover:text-cyan-400 transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-cyan-400 hover:after:w-full after:transition-all">Color Suite</a>
+        <a href="#arsenal" class="hover:text-cyan-400 transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-cyan-400 hover:after:w-full after:transition-all">Camera Vault</a>
+        <a href="#estimator" class="hover:text-cyan-400 transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-cyan-400 hover:after:w-full after:transition-all">Budget Estimator</a>
+      </nav>
+
+      <!-- Action Cluster: Ambient Audio Engine & Direct Booking -->
+      <div class="flex items-center gap-3 sm:gap-4">
+        
+        <!-- Interactive Web Audio Ambient Drone Synth Toggle -->
+        <button id="audio-toggle" class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-neutral-800 bg-noir-900/90 text-neutral-400 hover:text-cyan-400 hover:border-cyan-500/40 text-[10px] font-mono tracking-wider transition-all cursor-pointer group" title="Toggle Cinematic Drone Soundscape">
+          <span class="relative flex h-2 w-2">
+            <span id="audio-pulse" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-0"></span>
+            <span id="audio-dot" class="relative inline-flex rounded-full h-2 w-2 bg-neutral-600 group-hover:bg-cyan-400 transition-colors"></span>
+          </span>
+          <span id="audio-label" class="hidden sm:inline">SOUNDSCAPE: OFF</span>
+          <svg class="w-3.5 h-3.5 opacity-70 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
+          </svg>
+        </button>
+
+        <!-- Treatment / Book Direct Button -->
+        <a href="#contact" class="px-4 sm:px-5 py-2 rounded border border-neutral-300/30 bg-white/5 hover:bg-white text-white hover:text-black font-mono text-[11px] uppercase tracking-widest transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] backdrop-blur-sm flex items-center gap-2">
+          <span>Book Production</span>
+          <svg class="w-3 h-3 translate-y-[-0.5px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-neutral-400 hover:text-white" aria-label="Toggle Navigation">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="hidden md:hidden px-6 py-6 bg-noir-900 border-b border-neutral-800 space-y-4 font-mono text-xs uppercase tracking-widest">
+      <a href="#showreel" class="block text-neutral-300 hover:text-cyan-400 py-1">Showreel</a>
+      <a href="#portfolio" class="block text-neutral-300 hover:text-cyan-400 py-1">Selected Works</a>
+      <a href="#grading-suite" class="block text-neutral-300 hover:text-cyan-400 py-1">Color Suite (Raw vs Grade)</a>
+      <a href="#arsenal" class="block text-neutral-300 hover:text-cyan-400 py-1">Camera Vault</a>
+      <a href="#estimator" class="block text-neutral-300 hover:text-cyan-400 py-1">Production Budget Estimator</a>
+      <a href="#contact" class="block text-cyan-300 py-2 border-t border-neutral-800">Pitch Treatment / Contact</a>
+    </div>
+  </header>
+
+  <!-- Hero Section with Anamorphic Canvas & Live Timecode HUD -->
+  <section id="showreel" class="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    
+    <!-- Background Canvas for Cinematic Floating Dust & Lens Flarestreaks -->
+    <canvas id="cinema-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+    <!-- Deep Ambient Glows -->
+    <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-cyan-900/10 rounded-full blur-[140px] pointer-events-none"></div>
+    <div class="absolute bottom-10 right-10 w-[450px] h-[250px] bg-amber-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <!-- Viewfinder Grid & Corner Reticles (Cinema Camera HUD) -->
+    <div class="absolute inset-4 sm:inset-10 border border-neutral-800/40 pointer-events-none z-10 hidden sm:block">
+      <!-- Top Left Corner -->
+      <div class="absolute -top-[1px] -left-[1px] w-6 h-6 border-t-2 border-l-2 border-cyan-400/80"></div>
+      <!-- Top Right Corner -->
+      <div class="absolute -top-[1px] -right-[1px] w-6 h-6 border-t-2 border-r-2 border-cyan-400/80"></div>
+      <!-- Bottom Left Corner -->
+      <div class="absolute -bottom-[1px] -left-[1px] w-6 h-6 border-b-2 border-l-2 border-cyan-400/80"></div>
+      <!-- Bottom Right Corner -->
+      <div class="absolute -bottom-[1px] -right-[1px] w-6 h-6 border-b-2 border-r-2 border-cyan-400/80"></div>
+
+      <!-- Live Cinema Metadata Overlay -->
+      <div class="absolute top-4 left-6 flex items-center gap-6 font-mono text-[10px] text-neutral-400 tracking-wider">
+        <span class="flex items-center gap-1.5 text-red-500 font-bold">
+          <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> REC [RAW]
+        </span>
+        <span class="text-neutral-500">|</span>
+        <span>FPS: <strong class="text-neutral-200">24.000 DCI</strong></span>
+        <span class="text-neutral-500">|</span>
+        <span>SHUTTER: <strong class="text-neutral-200">180.0°</strong></span>
+        <span class="text-neutral-500">|</span>
+        <span>ISO: <strong class="text-neutral-200">800 EI</strong></span>
+      </div>
+
+      <div class="absolute top-4 right-6 font-mono text-[10px] text-neutral-400 tracking-wider flex items-center gap-4">
+        <span>SENSOR: <strong class="text-neutral-200">ARRI LF 3:2 OPEN GATE</strong></span>
+        <span class="text-neutral-500">|</span>
+        <span id="timecode-display" class="text-cyan-400 font-bold">01:24:39:14</span>
+      </div>
+
+      <div class="absolute bottom-4 left-6 font-mono text-[10px] text-neutral-500">
+        MG-CINEMA-COLOR-CORE // 35MM COOKE ANAMORPHIC /i
+      </div>
+      <div class="absolute bottom-4 right-6 font-mono text-[10px] text-neutral-500">
+        ASPECT: 2.39:1 CINEMASCOPE
+      </div>
+    </div>
+
+    <!-- Center Hero Content -->
+    <div class="relative z-20 max-w-5xl mx-auto text-center flex flex-col items-center">
+      
+      <!-- Sub-badge -->
+      <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full border border-neutral-700/60 bg-noir-900/80 backdrop-blur-md mb-8 animate-fade-in">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+        <span class="font-mono text-[10px] sm:text-xs tracking-[0.25em] text-neutral-300 uppercase">
+          Production House • Commercials • Feature Films • Color Grade
+        </span>
+      </div>
+
+      <!-- Main Headline: Luxury Editorial Serif with Dramatic Film Punch -->
+      <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-white uppercase font-bold leading-[1.08] max-w-4xl drop-shadow-2xl">
+        Stories Captured In <br>
+        <span class="silver-metallic italic font-serif font-normal">8K Perfection.</span>
+      </h1>
+
+      <!-- Subtitle Description -->
+      <p class="mt-6 max-w-2xl text-sm sm:text-base md:text-lg text-neutral-400 font-light leading-relaxed tracking-wide">
+        From visionary high-budget music videos and international commercials to feature cinema. MG CINEMATIC directs, shoots, and master-grades unforgettable visual narratives with world-class anamorphic glass.
+      </p>
+
+      <!-- Hero Call-to-Action Group -->
+      <div class="mt-10 flex flex-col sm:flex-row items-center gap-5 w-full justify-center">
+        
+        <!-- Watch Reel Button with Pulsing Play Trigger -->
+        <button id="open-reel-modal" class="w-full sm:w-auto px-8 py-4 rounded bg-white text-black font-mono text-xs uppercase tracking-[0.2em] font-semibold hover:bg-cyan-300 transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_35px_rgba(255,255,255,0.25)] group cursor-pointer">
+          <span class="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center group-hover:scale-110 transition-transform">
+            <svg class="w-3.5 h-3.5 translate-x-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+          <span>Watch 2026 Showreel</span>
+        </button>
+
+        <!-- Explore Projects Secondary Button -->
+        <a href="#portfolio" class="w-full sm:w-auto px-8 py-4 rounded border border-neutral-700 bg-noir-900/60 hover:border-neutral-400 text-neutral-200 font-mono text-xs uppercase tracking-[0.2em] transition-all duration-300 hover:bg-neutral-800/60 flex items-center justify-center gap-2">
+          <span>Explore Works</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </a>
+
+      </div>
+
+      <!-- Quick Metrics Strip -->
+      <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-10 border-t border-neutral-900 pt-8 w-full max-w-4xl">
+        <div class="text-center">
+          <p class="font-serif text-2xl sm:text-3xl text-white font-bold tracking-tight">150+</p>
+          <p class="font-mono text-[10px] text-neutral-500 tracking-widest uppercase mt-1">Commercials Delivered</p>
+        </div>
+        <div class="text-center">
+          <p class="font-serif text-2xl sm:text-3xl text-cyan-400 font-bold tracking-tight">14</p>
+          <p class="font-mono text-[10px] text-neutral-500 tracking-widest uppercase mt-1">Festival Laurels</p>
+        </div>
+        <div class="text-center">
+          <p class="font-serif text-2xl sm:text-3xl text-white font-bold tracking-tight">8K DCI</p>
+          <p class="font-mono text-[10px] text-neutral-500 tracking-widest uppercase mt-1">Master Pipeline</p>
+        </div>
+        <div class="text-center">
+          <p class="font-serif text-2xl sm:text-3xl text-amber-400 font-bold tracking-tight">45M+</p>
+          <p class="font-mono text-[10px] text-neutral-500 tracking-widest uppercase mt-1">Streaming Views</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Interactive Color Grading Suite: S-Log3/RAW vs Final Hollywood Grade -->
+  <section id="grading-suite" class="py-24 px-4 sm:px-6 lg:px-8 border-t border-neutral-900 bg-noir-900/70 relative">
+    <div class="max-w-7xl mx-auto">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        <div>
+          <span class="font-mono text-cyan-400 text-xs tracking-[0.3em] uppercase block mb-2">// POST-PRODUCTION MASTERY</span>
+          <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-tight text-white">
+            RAW Sensor Flat <span class="text-neutral-500 font-normal">vs</span> Film Grade
+          </h2>
+        </div>
+        <p class="mt-4 md:mt-0 max-w-md font-sans text-neutral-400 text-sm leading-relaxed">
+          Drag the interactive split handle to experience our custom 35mm film emulation LUT, DaVinci Resolve color science, and highlights roll-off.
+        </p>
+      </div>
+
+      <!-- Split Slider Card Container -->
+      <div class="relative rounded-2xl overflow-hidden border border-neutral-800 bg-noir-950 shadow-2xl shadow-black/80 aspect-cinema max-h-[640px] w-full select-none" id="grade-container">
+        
+        <!-- BEFORE: Flat Log / RAW Image Layer -->
+        <div class="absolute inset-0 w-full h-full bg-cover bg-center filter grayscale-[60%] brightness-[1.2] contrast-[0.75] opacity-90 transition-none"
+             style="background-image: url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=2000&q=80');">
+          <!-- RAW Overlay Badge -->
+          <div class="absolute top-6 left-6 px-3 py-1.5 rounded bg-black/75 border border-neutral-700 text-[10px] font-mono tracking-widest text-neutral-300 uppercase">
+            [A] ARRI LogC4 RAW // FLAT SENSOR (UNGRADED)
+          </div>
+          <div class="absolute bottom-6 left-6 font-mono text-[10px] text-neutral-400 hidden sm:block">
+            Gamut: Alexa Wide Color Gamut 4 • No Rec.709 Transform Applied
+          </div>
+        </div>
+
+        <!-- AFTER: Graded Layer with Dynamic Clip Path -->
+        <div id="grade-overlay" class="absolute inset-0 w-full h-full bg-cover bg-center filter saturate-[1.35] contrast-[1.25] hue-rotate-[-8deg] brightness-[0.96]"
+             style="background-image: url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=2000&q=80'); clip-path: inset(0 0 0 50%);">
+          <!-- Film Tint & Halation Effect simulation -->
+          <div class="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-transparent to-cyan-500/15 mix-blend-overlay"></div>
+          
+          <!-- GRADED Badge -->
+          <div class="absolute top-6 right-6 px-3 py-1.5 rounded bg-black/85 border border-cyan-500/50 text-[10px] font-mono tracking-widest text-cyan-300 uppercase shadow-[0_0_15px_rgba(0,242,254,0.3)]">
+            [B] MG 35MM ANAMORPHIC SHOW LUT // KODAK 2383 PRINT EMULATION
+          </div>
+          <div class="absolute bottom-6 right-6 font-mono text-[10px] text-amber-300/80 hidden sm:block text-right">
+            Master Target: DCI-P3 HDR 1000 Nits • Halation & Film Bloom
+          </div>
+        </div>
+
+        <!-- Drag Handle Line -->
+        <div id="slider-handle" class="absolute top-0 bottom-0 w-[2px] bg-white shadow-[0_0_20px_#ffffff] left-1/2 -translate-x-1/2 cursor-ew-resize z-20 flex items-center justify-center">
+          <div class="w-10 h-10 rounded-full bg-noir-900 border-2 border-white text-white flex items-center justify-center shadow-[0_0_20px_rgba(0,242,254,0.6)] cursor-grab active:cursor-grabbing hover:scale-110 transition-transform">
+            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/></svg>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Color Grading Controls Strip -->
+      <div class="mt-6 flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl border border-neutral-800/80 bg-noir-950 font-mono text-xs">
+        <div class="flex items-center gap-3">
+          <span class="text-neutral-400">SCOPE:</span>
+          <span class="px-2.5 py-1 rounded bg-neutral-800 text-neutral-200 font-semibold text-[11px]">PARADE (RGB)</span>
+          <span class="px-2.5 py-1 rounded bg-neutral-900 text-neutral-400 text-[11px]">VECTORSCOPE</span>
+          <span class="px-2.5 py-1 rounded bg-neutral-900 text-neutral-400 text-[11px]">CIE CHROMATICITY</span>
+        </div>
+        <div class="flex items-center gap-4 text-neutral-400">
+          <span>MIDTONE CONTRAST: <strong class="text-cyan-400">+1.24</strong></span>
+          <span class="hidden sm:inline">•</span>
+          <span>HIGHLIGHT ROLL-OFF: <strong class="text-amber-400">SOFT KODAK</strong></span>
+          <span class="hidden sm:inline">•</span>
+          <span>GRAIN SIZE: <strong class="text-neutral-200">35MM FINE</strong></span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Featured Projects & Cinema Portfolio -->
+  <section id="portfolio" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    
+    <!-- Section Header & Filter Tabs -->
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-6">
+      <div>
+        <span class="font-mono text-cyan-400 text-xs tracking-[0.3em] uppercase block mb-2">// SELECTED WORKS</span>
+        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-tight text-white">
+          Cinematic Reel Portfolio
+        </h2>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div class="flex flex-wrap gap-2 font-mono text-xs uppercase" id="portfolio-filters">
+        <button data-filter="all" class="filter-btn active px-4 py-2 rounded-full border border-cyan-400/80 bg-cyan-400/10 text-cyan-300 font-medium transition-all">All Films</button>
+        <button data-filter="feature" class="filter-btn px-4 py-2 rounded-full border border-neutral-800 bg-noir-900 text-neutral-400 hover:text-white hover:border-neutral-700 transition-all">Feature Films</button>
+        <button data-filter="commercial" class="filter-btn px-4 py-2 rounded-full border border-neutral-800 bg-noir-900 text-neutral-400 hover:text-white hover:border-neutral-700 transition-all">Commercials</button>
+        <button data-filter="music" class="filter-btn px-4 py-2 rounded-full border border-neutral-800 bg-noir-900 text-neutral-400 hover:text-white hover:border-neutral-700 transition-all">Music Videos</button>
+        <button data-filter="aerial" class="filter-btn px-4 py-2 rounded-full border border-neutral-800 bg-noir-900 text-neutral-400 hover:text-white hover:border-neutral-700 transition-all">FPV & Aerial</button>
+      </div>
+    </div>
+
+    <!-- Project Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
+      
+      <!-- Project 1: Feature Film -->
+      <div class="project-card group cursor-pointer" data-category="feature" onclick="openProjectModal('the-chronicle-of-noir')">
+        <div class="relative rounded-xl overflow-hidden border border-neutral-800/80 bg-noir-900 aspect-[16/10] sm:aspect-cinema transition-all duration-500 group-hover:border-cyan-500/60 group-hover:shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+          <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80" alt="Chronicles of Noir" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-90 group-hover:brightness-100" />
+          
+          <!-- Laurel Badge Floating Top Right -->
+          <div class="absolute top-3 right-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-amber-400/40 text-[10px] font-mono text-amber-300 flex items-center gap-1.5">
+            <span>★ CANNES 2025 NOMINEE</span>
+          </div>
+
+          <!-- Camera Spec Tag -->
+          <div class="absolute bottom-3 left-3 bg-black/80 backdrop-blur-sm px-2.5 py-1 rounded border border-neutral-700 text-[10px] font-mono text-neutral-300">
+            ARRI ALEXA 35 • COOKE ANAMORPHIC 40MM
+          </div>
+          
+          <!-- Hover Play Overlay Button -->
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <div class="w-14 h-14 rounded-full bg-white/90 text-black flex items-center justify-center shadow-[0_0_25px_rgba(255,255,255,0.7)] group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6 translate-x-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-start justify-between">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-[10px] uppercase text-cyan-400 tracking-wider">Feature Film • 118 MIN</span>
+            </div>
+            <h3 class="font-serif text-xl font-bold text-white mt-1 group-hover:text-cyan-300 transition-colors">The Chronicles of Noir</h3>
+            <p class="text-neutral-400 text-xs mt-1 font-light">Dark neo-thriller psychological drama directed & graded in full 4K DCI.</p>
+          </div>
+          <span class="font-mono text-xs text-neutral-500 mt-1">2025</span>
+        </div>
+      </div>
+
+      <!-- Project 2: Commercial -->
+      <div class="project-card group cursor-pointer" data-category="commercial" onclick="openProjectModal('velocita-supercar-spec')">
+        <div class="relative rounded-xl overflow-hidden border border-neutral-800/80 bg-noir-900 aspect-[16/10] sm:aspect-cinema transition-all duration-500 group-hover:border-cyan-500/60 group-hover:shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+          <img src="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1200&q=80" alt="Velocità Supercar" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-90 group-hover:brightness-100" />
+          
+          <div class="absolute top-3 right-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-cyan-400/40 text-[10px] font-mono text-cyan-300 flex items-center gap-1.5">
+            <span>CLIO AWARDS WINNER</span>
+          </div>
+
+          <div class="absolute bottom-3 left-3 bg-black/80 backdrop-blur-sm px-2.5 py-1 rounded border border-neutral-700 text-[10px] font-mono text-neutral-300">
+            RED V-RAPTOR 8K VV • RUSSIAN ARMS RIG
+          </div>
+
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <div class="w-14 h-14 rounded-full bg-white/90 text-black flex items-center justify-center shadow-[0_0_25px_rgba(255,255,255,0.7)] group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6 translate-x-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-start justify-between">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-[10px] uppercase text-cyan-400 tracking-wider">Commercial • 60 SEC TVC</span>
+            </div>
+            <h3 class="font-serif text-xl font-bold text-white mt-1 group-hover:text-cyan-300 transition-colors">Velocità // Hyper-Spec</h3>
+            <p class="text-neutral-400 text-xs mt-1 font-light">High-octane tracking shots with precision arm camera systems at sunset.</p>
+          </div>
+          <span class="font-mono text-xs text-neutral-500 mt-1">2026</span>
+        </div>
+      </div>
+
+      <!-- Project 3: Music Video -->
+      <div class="project-card group cursor-pointer" data-category="music" onclick="openProjectModal('midnight-mirage')">
+        <div class="relative rounded-xl overflow-hidden border border-neutral-800/80 bg-noir-900 aspect-[16/10] sm:aspect-cinema transition-all duration-500 group-hover:border-cyan-500/60 group-hover:shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+          <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80" alt="Midnight Mirage" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-90 group-hover:brightness-100" />
+          
+          <div class="absolute top-3 right-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-purple-400/40 text-[10px] font-mono text-purple-300 flex items-center gap-1.5">
+            <span>22M+ STREAMS</span>
+          </div>
+
+          <div class="absolute bottom-3 left-3 bg-black/80 backdrop-blur-sm px-2.5 py-1 rounded border border-neutral-700 text-[10px] font-mono text-neutral-300">
+            SONY VENICE 2 • ATLAS ORION 2X
+          </div>
+
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <div class="w-14 h-14 rounded-full bg-white/90 text-black flex items-center justify-center shadow-[0_0_25px_rgba(255,255,255,0.7)] group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6 translate-x-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-start justify-between">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-[10px] uppercase text-cyan-400 tracking-wider">Music Video • 03:45</span>
+            </div>
+            <h3 class="font-serif text-xl font-bold text-white mt-1 group-hover:text-cyan-300 transition-colors">Midnight Mirage</h3>
+            <p class="text-neutral-400 text-xs mt-1 font-light">Cyberpunk neon aesthetic, heavy anamorphic lens flares and smoke haze.</p>
+          </div>
+          <span class="font-mono text-xs text-neutral-500 mt-1">2025</span>
+        </div>
+      </div>
+
+      <!-- Project 4: Aerial & FPV -->
+      <div class="project-card group cursor-pointer" data-category="aerial" onclick="openProjectModal('alps-kinetic-fpv')">
+        <div class="relative rounded-xl overflow-hidden border border-neutral-800/80 bg-noir-900 aspect-[16/10] sm:aspect-cinema transition-all duration-500 group-hover:border-cyan-500/60 group-hover:shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80" alt="Kinetic FPV" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-90 group-hover:brightness-100" />
+          
+          <div class="absolute top-3 right-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-emerald-400/40 text-[10px] font-mono text-emerald-300 flex items-center gap-1.5">
+            <span>RED KOMODO 6K AIRBORNE</span>
+          </div>
+
+          <div class="absolute bottom-3 left-3 bg-black/80 backdrop-blur-sm px-2.5 py-1 rounded border border-neutral-700 text-[10px] font-mono text-neutral-300">
+            SICARIO HEAVY-LIFT FPV RIG
+          </div>
+
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <div class="w-14 h-14 rounded-full bg-white/90 text-black flex items-center justify-center shadow-[0_0_25px_rgba(255,255,255,0.7)] group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6 translate-x-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-start justify-between">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-[10px] uppercase text-cyan-400 tracking-wider">Aerial Cinematography</span>
+            </div>
+            <h3 class="font-serif text-xl font-bold text-white mt-1 group-hover:text-cyan-300 transition-colors">Alpine Descent // Kinetic FPV</h3>
+            <p class="text-neutral-400 text-xs mt-1 font-light">Sub-zero mountain freefall dives at 140km/h with high-speed cinema glass.</p>
+          </div>
+          <span class="font-mono text-xs text-neutral-500 mt-1">2026</span>
+        </div>
+      </div>
+
+      <!-- Project 5: Feature Film -->
+      <div class="project-card group cursor-pointer" data-category="feature" onclick="openProjectModal('solitary-echoes')">
+        <div class="relative rounded-xl overflow-hidden border border-neutral-800/80 bg-noir-900 aspect-[16/10] sm:aspect-cinema transition-all duration-500 group-hover:border-cyan-500/60 group-hover:shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+          <img src="https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&w=1200&q=80" alt="Solitary Echoes" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-90 group-hover:brightness-100" />
+          
+          <div class="absolute top-3 right-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-amber-400/40 text-[10px] font-mono text-amber-300 flex items-center gap-1.5">
+            <span>VENICE BIENNALE SELECTION</span>
+          </div>
+
+          <div class="absolute bottom-3 left-3 bg-black/80 backdrop-blur-sm px-2.5 py-1 rounded border border-neutral-700 text-[10px] font-mono text-neutral-300">
+            ARRI ALEXA MINI LF • MASTER PRIMES
+          </div>
+
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <div class="w-14 h-14 rounded-full bg-white/90 text-black flex items-center justify-center shadow-[0_0_25px_rgba(255,255,255,0.7)] group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6 translate-x-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-start justify-between">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-[10px] uppercase text-cyan-400 tracking-wider">Independent Feature</span>
+            </div>
+            <h3 class="font-serif text-xl font-bold text-white mt-1 group-hover:text-cyan-300 transition-colors">Solitary Echoes</h3>
+            <p class="text-neutral-400 text-xs mt-1 font-light">Contemplative human exploration captured in Icelandic remote volcanic shores.</p>
+          </div>
+          <span class="font-mono text-xs text-neutral-500 mt-1">2025</span>
+        </div>
+      </div>
+
+      <!-- Project 6: Commercial -->
+      <div class="project-card group cursor-pointer" data-category="commercial" onclick="openProjectModal('haute-horlogerie')">
+        <div class="relative rounded-xl overflow-hidden border border-neutral-800/80 bg-noir-900 aspect-[16/10] sm:aspect-cinema transition-all duration-500 group-hover:border-cyan-500/60 group-hover:shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+          <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80" alt="Haute Horlogerie" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-90 group-hover:brightness-100" />
+          
+          <div class="absolute top-3 right-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-amber-400/40 text-[10px] font-mono text-amber-300 flex items-center gap-1.5">
+            <span>LUXURY GLOBAL CAMPAIGN</span>
+          </div>
+
+          <div class="absolute bottom-3 left-3 bg-black/80 backdrop-blur-sm px-2.5 py-1 rounded border border-neutral-700 text-[10px] font-mono text-neutral-300">
+            PHANTOM 4K HIGH SPEED • 1000 FPS
+          </div>
+
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <div class="w-14 h-14 rounded-full bg-white/90 text-black flex items-center justify-center shadow-[0_0_25px_rgba(255,255,255,0.7)] group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6 translate-x-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-start justify-between">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-[10px] uppercase text-cyan-400 tracking-wider">Luxury Brand Commercial</span>
+            </div>
+            <h3 class="font-serif text-xl font-bold text-white mt-1 group-hover:text-cyan-300 transition-colors">Chronometrie // Swiss Precision</h3>
+            <p class="text-neutral-400 text-xs mt-1 font-light">Microscopic macro mechanical movements at 1,000 frames-per-second.</p>
+          </div>
+          <span class="font-mono text-xs text-neutral-500 mt-1">2026</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Gear Vault & Technology Standards -->
+  <section id="arsenal" class="py-24 px-4 sm:px-6 lg:px-8 border-t border-neutral-900 bg-noir-900/40">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="font-mono text-cyan-400 text-xs tracking-[0.3em] uppercase block mb-2">// PRODUCTION ARSENAL</span>
+        <h2 class="font-serif text-3xl sm:text-5xl font-bold uppercase tracking-tight text-white">
+          The 8K Cinema Vault
+        </h2>
+        <p class="mt-4 text-neutral-400 font-light text-sm sm:text-base leading-relaxed">
+          Every frame produced by MG CINEMATIC is captured on industry-standard A-tier cinema sensors, anamorphic glass, and advanced gimbal stabilizations.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Gear Card 1 -->
+        <div class="p-6 rounded-xl border border-neutral-800 bg-noir-950/80 hover:border-cyan-500/40 transition-all duration-300 group">
+          <div class="w-12 h-12 rounded bg-cyan-950/40 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-6 font-mono text-sm font-bold">
+            01
+          </div>
+          <h4 class="font-serif text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">ARRI Alexa 35</h4>
+          <p class="text-xs text-neutral-400 font-mono mt-1">17 STOPS DYNAMIC RANGE</p>
+          <p class="text-xs text-neutral-500 mt-3 leading-relaxed">
+            Super 35 native 4.6K sensor capturing ARRI REVEAL Color Science, high frame rates up to 120fps, and unrivaled skin tones.
+          </p>
+          <div class="mt-4 pt-4 border-t border-neutral-900 font-mono text-[10px] text-cyan-400">
+            [PRIMARY FEATURE PACKAGE]
+          </div>
+        </div>
+
+        <!-- Gear Card 2 -->
+        <div class="p-6 rounded-xl border border-neutral-800 bg-noir-950/80 hover:border-cyan-500/40 transition-all duration-300 group">
+          <div class="w-12 h-12 rounded bg-cyan-950/40 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-6 font-mono text-sm font-bold">
+            02
+          </div>
+          <h4 class="font-serif text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">RED V-Raptor 8K VV</h4>
+          <p class="text-xs text-neutral-400 font-mono mt-1">LARGE FORMAT FULL FRAME</p>
+          <p class="text-xs text-neutral-500 mt-3 leading-relaxed">
+            35.4 Megapixel multi-format sensor capable of 8K 120fps and 4K 240fps for immense post reframing flexibility and hyper-clarity.
+          </p>
+          <div class="mt-4 pt-4 border-t border-neutral-900 font-mono text-[10px] text-cyan-400">
+            [COMMERCIAL & HIGH-SPEED]
+          </div>
+        </div>
+
+        <!-- Gear Card 3 -->
+        <div class="p-6 rounded-xl border border-neutral-800 bg-noir-950/80 hover:border-cyan-500/40 transition-all duration-300 group">
+          <div class="w-12 h-12 rounded bg-cyan-950/40 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-6 font-mono text-sm font-bold">
+            03
+          </div>
+          <h4 class="font-serif text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">Cooke Anamorphic /i</h4>
+          <p class="text-xs text-neutral-400 font-mono mt-1">TRUE 2X SQUEEZE OPTICS</p>
+          <p class="text-xs text-neutral-500 mt-3 leading-relaxed">
+            Legendary "Cooke Look" with organic oval bokeh, controlled cinematic flare roll-off, and intelligent lens metadata logging.
+          </p>
+          <div class="mt-4 pt-4 border-t border-neutral-900 font-mono text-[10px] text-cyan-400">
+            [SIGNATURE LENS PACKAGE]
+          </div>
+        </div>
+
+        <!-- Gear Card 4 -->
+        <div class="p-6 rounded-xl border border-neutral-800 bg-noir-950/80 hover:border-cyan-500/40 transition-all duration-300 group">
+          <div class="w-12 h-12 rounded bg-cyan-950/40 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-6 font-mono text-sm font-bold">
+            04
+          </div>
+          <h4 class="font-serif text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">DaVinci Resolve Studio</h4>
+          <p class="text-xs text-neutral-400 font-mono mt-1">FLANDERS SCIENTIFIC DCI 4K</p>
+          <p class="text-xs text-neutral-500 mt-3 leading-relaxed">
+            Full-size Advanced Grading Trackball surface with calibrated 1000-nit HDR grading displays and Dolby Vision certified suites.
+          </p>
+          <div class="mt-4 pt-4 border-t border-neutral-900 font-mono text-[10px] text-cyan-400">
+            [COLOR GRADING MASTER]
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Interactive Project Budget Estimator -->
+  <section id="estimator" class="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+    <div class="rounded-3xl border border-neutral-800 bg-noir-900/90 p-8 sm:p-12 relative overflow-hidden shadow-2xl">
+      
+      <!-- Top Subtle Background Glow -->
+      <div class="absolute top-0 right-0 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="font-mono text-cyan-400 text-xs tracking-[0.3em] uppercase block mb-2">// REAL-TIME PROJECT SCOPING</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold uppercase text-white">Production Budget Calculator</h2>
+        <p class="text-neutral-400 text-xs sm:text-sm mt-2">
+          Configure your production requirements below to compute an accurate preliminary budget estimate.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Controls Column -->
+        <div class="space-y-6">
+          
+          <!-- Project Type -->
+          <div>
+            <label class="block font-mono text-xs text-neutral-300 tracking-wider uppercase mb-2">1. Film / Project Scope</label>
+            <select id="est-type" class="w-full bg-noir-950 border border-neutral-700 rounded-lg px-4 py-3 text-sm text-neutral-100 font-sans focus:outline-none focus:border-cyan-400 transition-colors">
+              <option value="music-video" data-base="150000">Music Video (High-Impact 4K)</option>
+              <option value="commercial" data-base="350000" selected>Commercial Ad Campaign (TVC + Digital)</option>
+              <option value="feature-indie" data-base="1200000">Indie Feature / Short Cinema</option>
+              <option value="documentary" data-base="450000">Documentary / Cinematic Brand Story</option>
+            </select>
+          </div>
+
+          <!-- Shoot Days Slider -->
+          <div>
+            <div class="flex justify-between items-center mb-2 font-mono text-xs">
+              <span class="text-neutral-300 uppercase tracking-wider">2. Principal Shoot Days</span>
+              <span class="text-cyan-400 font-bold" id="days-val">2 Shoot Days</span>
+            </div>
+            <input type="range" id="est-days" min="1" max="14" value="2" class="w-full h-2 bg-neutral-800 rounded-lg appearance-none cursor-pointer">
+            <div class="flex justify-between text-[10px] font-mono text-neutral-500 mt-1">
+              <span>1 Day</span>
+              <span>7 Days</span>
+              <span>14 Days</span>
+            </div>
+          </div>
+
+          <!-- Camera Rig Package -->
+          <div>
+            <label class="block font-mono text-xs text-neutral-300 tracking-wider uppercase mb-2">3. Camera & Lens Package</label>
+            <select id="est-camera" class="w-full bg-noir-950 border border-neutral-700 rounded-lg px-4 py-3 text-sm text-neutral-100 font-sans focus:outline-none focus:border-cyan-400 transition-colors">
+              <option value="arri-alexa-35" data-cost="75000">ARRI Alexa 35 + Cooke Anamorphic 2X (Signature Look)</option>
+              <option value="red-raptor" data-cost="55000" selected>RED V-Raptor 8K VV + Cinema Zooms</option>
+              <option value="sony-venice" data-cost="45000">Sony FX9 / Venice Cinema Package</option>
+            </select>
+          </div>
+
+          <!-- Post-Production Tier -->
+          <div>
+            <label class="block font-mono text-xs text-neutral-300 tracking-wider uppercase mb-2">4. Color Grading & Post Tier</label>
+            <select id="est-post" class="w-full bg-noir-950 border border-neutral-700 rounded-lg px-4 py-3 text-sm text-neutral-100 font-sans focus:outline-none focus:border-cyan-400 transition-colors">
+              <option value="hollywood-hdr" data-cost="120000" selected>DCI-P3 Hollywood 4K HDR Color Grade + Sound Design</option>
+              <option value="master-grade" data-cost="65000">Standard Master Grade + Rec.709 Delivery</option>
+              <option value="vfx-full" data-cost="240000">Full VFX + 3D CGI Environments + Dolby Atmos</option>
+            </select>
+          </div>
+
+        </div>
+
+        <!-- Estimate Output Card -->
+        <div class="bg-noir-950 rounded-2xl border border-neutral-800 p-6 sm:p-8 flex flex-col justify-between">
+          <div>
+            <span class="font-mono text-[10px] uppercase tracking-widest text-neutral-500">Live Production Estimate</span>
+            
+            <!-- Price Display -->
+            <div class="mt-4 flex items-baseline gap-2">
+              <span class="font-mono text-sm text-neutral-400">INR</span>
+              <span id="calculated-price" class="font-serif text-3xl sm:text-4xl font-bold text-white tracking-tight">₹ 6,20,000</span>
+              <span class="font-mono text-[11px] text-neutral-500">*est</span>
+            </div>
+
+            <!-- Currency toggle info -->
+            <p class="mt-2 text-neutral-400 font-mono text-[11px] leading-relaxed">
+              Approx. <span id="usd-price" class="text-cyan-300 font-semibold">$7,450 USD</span> (Excludes location permits & talent riders).
+            </p>
+
+            <div class="mt-6 space-y-2.5 border-t border-neutral-900 pt-5 font-mono text-xs text-neutral-400">
+              <div class="flex justify-between">
+                <span>Director & DP Package:</span>
+                <span class="text-neutral-200">INCLUDED</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Grip, Lighting (Aputure/Astera):</span>
+                <span class="text-neutral-200">INCLUDED</span>
+              </div>
+              <div class="flex justify-between">
+                <span>4K/8K Master Delivery:</span>
+                <span class="text-cyan-400">PRORES 4444 XQ</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Turnaround Time:</span>
+                <span class="text-neutral-200">10-14 Business Days</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <button onclick="requestEstimatedTreatment()" class="w-full py-4 rounded bg-cyan-400 hover:bg-cyan-300 text-black font-mono text-xs uppercase tracking-widest font-bold transition-all shadow-[0_0_25px_rgba(0,242,254,0.3)] flex items-center justify-center gap-2 cursor-pointer">
+              <span>Lock This Scope & Request Treatment</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
+            <p class="text-center font-mono text-[10px] text-neutral-600 mt-2">Free Treatment Pitch Deck Provided within 48 Hours</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- International Laurels & Partner Brands Marquee -->
+  <section class="py-16 border-y border-neutral-900 bg-noir-900/30 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      
+      <!-- Festival Laurels Row -->
+      <div class="flex flex-wrap items-center justify-center gap-8 sm:gap-14 mb-12 opacity-80">
+        
+        <!-- Laurel 1 -->
+        <div class="flex flex-col items-center">
+          <svg class="w-14 h-8 text-neutral-400" viewBox="0 0 100 40" fill="currentColor">
+            <path d="M10 20C12 12 18 6 25 3C22 8 22 15 25 20C20 20 15 24 12 28C10 25 10 22 10 20Z"/>
+            <path d="M90 20C88 12 82 6 75 3C78 8 78 15 75 20C80 20 85 24 88 28C90 25 90 22 90 20Z"/>
+          </svg>
+          <span class="font-serif text-[11px] uppercase tracking-widest text-neutral-300 mt-1 font-bold">CANNES 2025</span>
+          <span class="font-mono text-[8px] text-neutral-500 uppercase tracking-wider">OFFICIAL SELECTION</span>
+        </div>
+
+        <!-- Laurel 2 -->
+        <div class="flex flex-col items-center">
+          <svg class="w-14 h-8 text-neutral-400" viewBox="0 0 100 40" fill="currentColor">
+            <path d="M10 20C12 12 18 6 25 3C22 8 22 15 25 20C20 20 15 24 12 28C10 25 10 22 10 20Z"/>
+            <path d="M90 20C88 12 82 6 75 3C78 8 78 15 75 20C80 20 85 24 88 28C90 25 90 22 90 20Z"/>
+          </svg>
+          <span class="font-serif text-[11px] uppercase tracking-widest text-neutral-300 mt-1 font-bold">VENICE BIENNALE</span>
+          <span class="font-mono text-[8px] text-neutral-500 uppercase tracking-wider">BEST CINEMATOGRAPHY</span>
+        </div>
+
+        <!-- Laurel 3 -->
+        <div class="flex flex-col items-center">
+          <svg class="w-14 h-8 text-neutral-400" viewBox="0 0 100 40" fill="currentColor">
+            <path d="M10 20C12 12 18 6 25 3C22 8 22 15 25 20C20 20 15 24 12 28C10 25 10 22 10 20Z"/>
+            <path d="M90 20C88 12 82 6 75 3C78 8 78 15 75 20C80 20 85 24 88 28C90 25 90 22 90 20Z"/>
+          </svg>
+          <span class="font-serif text-[11px] uppercase tracking-widest text-neutral-300 mt-1 font-bold">SUNDANCE 2024</span>
+          <span class="font-mono text-[8px] text-neutral-500 uppercase tracking-wider">SPECIAL JURY PRIZE</span>
+        </div>
+
+        <!-- Laurel 4 -->
+        <div class="flex flex-col items-center">
+          <svg class="w-14 h-8 text-neutral-400" viewBox="0 0 100 40" fill="currentColor">
+            <path d="M10 20C12 12 18 6 25 3C22 8 22 15 25 20C20 20 15 24 12 28C10 25 10 22 10 20Z"/>
+            <path d="M90 20C88 12 82 6 75 3C78 8 78 15 75 20C80 20 85 24 88 28C90 25 90 22 90 20Z"/>
+          </svg>
+          <span class="font-serif text-[11px] uppercase tracking-widest text-neutral-300 mt-1 font-bold">CLIO GOLD</span>
+          <span class="font-mono text-[8px] text-neutral-500 uppercase tracking-wider">GLOBAL COMMERCIAL DIRECTION</span>
+        </div>
+
+      </div>
+
+      <!-- Marquee Brand Names -->
+      <p class="font-mono text-[10px] text-neutral-600 uppercase tracking-widest mb-6">TRUSTED BY WORLD-CLASS BRANDS & RECORD LABELS</p>
+      <div class="flex flex-wrap items-center justify-center gap-10 sm:gap-16 font-serif text-base sm:text-xl text-neutral-500 tracking-wider">
+        <span class="hover:text-white transition-colors cursor-default font-bold">SONY MUSIC</span>
+        <span class="hover:text-white transition-colors cursor-default font-bold">UNIVERSAL</span>
+        <span class="hover:text-white transition-colors cursor-default font-bold">NETFLIX</span>
+        <span class="hover:text-white transition-colors cursor-default font-bold">RED BULL MEDIA</span>
+        <span class="hover:text-white transition-colors cursor-default font-bold">PORSCHE</span>
+        <span class="hover:text-white transition-colors cursor-default font-bold">VOGUE</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Contact & Treatment Pitch Deck Section -->
+  <section id="contact" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      
+      <!-- Contact Info -->
+      <div class="lg:col-span-5 space-y-6">
+        <span class="font-mono text-cyan-400 text-xs tracking-[0.3em] uppercase block">// INITIATE COLLABORATION</span>
+        <h2 class="font-serif text-4xl sm:text-5xl font-bold uppercase text-white tracking-tight">
+          Let’s Create A Visual Masterpiece.
+        </h2>
+        <p class="text-neutral-400 text-sm sm:text-base leading-relaxed font-light">
+          Have an upcoming commercial, music video, or feature script? Connect directly with the MG CINEMATIC team for treatment breakdowns and shoot schedules.
+        </p>
+
+        <!-- Direct Fast-Track Actions -->
+        <div class="pt-4 space-y-4 font-mono text-xs">
+          
+          <!-- Direct WhatsApp Action -->
+          <a href="https://wa.me/919876543210?text=Hello%20MG%20Cinematic,%20I%20would%20like%20to%20discuss%20a%20cinematography%20project." target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 p-4 rounded-xl border border-emerald-500/30 bg-emerald-950/20 hover:bg-emerald-950/40 text-neutral-200 transition-all group">
+            <div class="w-10 h-10 rounded-full bg-emerald-500 text-black flex items-center justify-center group-hover:scale-110 transition-transform">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+            </div>
+            <div>
+              <p class="text-white font-bold">Fast-Track WhatsApp Chat</p>
+              <p class="text-neutral-400 text-[11px]">+91 DIRECT DIRECTOR LINE // INSTANT RESPONSE</p>
+            </div>
+          </a>
+
+          <!-- Direct Studio Email -->
+          <div class="flex items-center gap-4 p-4 rounded-xl border border-neutral-800 bg-noir-900 text-neutral-300">
+            <div class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-cyan-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <div>
+              <p class="text-white font-bold">Direct Treatment Pitch Email</p>
+              <p class="text-neutral-400 text-[11px]">productions@mgcinematic.com</p>
+            </div>
+          </div>
+
+          <!-- Studio Location -->
+          <div class="flex items-center gap-4 p-4 rounded-xl border border-neutral-800 bg-noir-900 text-neutral-300">
+            <div class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-amber-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <div>
+              <p class="text-white font-bold">Studio Hub</p>
+              <p class="text-neutral-400 text-[11px]">Mumbai • New Delhi • Worldwide Available</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Pitch Form -->
+      <div class="lg:col-span-7 bg-noir-900/80 border border-neutral-800 p-8 sm:p-10 rounded-2xl shadow-xl">
+        <h3 class="font-serif text-2xl text-white font-bold mb-6">Pitch Your Treatment</h3>
+        
+        <form id="treatment-form" class="space-y-4" onsubmit="handleFormSubmit(event)">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block font-mono text-[11px] text-neutral-400 uppercase tracking-wider mb-1">Your Name / Agency</label>
+              <input type="text" required placeholder="e.g. Christopher Nolan / Warner" class="w-full bg-noir-950 border border-neutral-800 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400">
+            </div>
+            <div>
+              <label class="block font-mono text-[11px] text-neutral-400 uppercase tracking-wider mb-1">Contact Email</label>
+              <input type="email" required placeholder="director@studio.com" class="w-full bg-noir-950 border border-neutral-800 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block font-mono text-[11px] text-neutral-400 uppercase tracking-wider mb-1">Project Category</label>
+              <select class="w-full bg-noir-950 border border-neutral-800 rounded px-4 py-3 text-sm text-neutral-300 focus:outline-none focus:border-cyan-400">
+                <option>High-Budget Commercial (TVC)</option>
+                <option>Official Music Video</option>
+                <option>Feature Cinema / Narrative</option>
+                <option>Independent Documentary</option>
+                <option>Color Grading Only</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-mono text-[11px] text-neutral-400 uppercase tracking-wider mb-1">Approximate Budget Range</label>
+              <select class="w-full bg-noir-950 border border-neutral-800 rounded px-4 py-3 text-sm text-neutral-300 focus:outline-none focus:border-cyan-400">
+                <option>₹ 5,00,000 - ₹ 15,00,000 ($6k - $18k)</option>
+                <option>₹ 15,00,000 - ₹ 40,00,000 ($18k - $50k)</option>
+                <option>₹ 40,00,000+ ($50k+)</option>
+                <option>Script Pitch / Co-Production</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-mono text-[11px] text-neutral-400 uppercase tracking-wider mb-1">Logline & Vision Summary</label>
+            <textarea rows="4" required placeholder="Tell us about the storyline, mood reference, desired camera style (e.g. anamorphic, handheld, crane), and estimated timeline..." class="w-full bg-noir-950 border border-neutral-800 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400"></textarea>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <input type="checkbox" id="nda-box" class="w-4 h-4 rounded bg-noir-950 border-neutral-700 text-cyan-500 focus:ring-0">
+            <label for="nda-box" class="font-mono text-xs text-neutral-400 cursor-pointer">Require Mutual NDA prior to treatment discussion</label>
+          </div>
+
+          <!-- Notification Toast Box (No alerts!) -->
+          <div id="form-toast" class="hidden p-4 rounded bg-cyan-950/60 border border-cyan-400 text-cyan-200 text-xs font-mono">
+            ✓ Treatment inquiry logged! The MG CINEMATIC director team will contact you within 24 hours.
+          </div>
+
+          <button type="submit" class="w-full py-4 rounded bg-white hover:bg-neutral-200 text-black font-mono text-xs uppercase tracking-[0.2em] font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] cursor-pointer">
+            Transmit Treatment Pitch
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-neutral-900 bg-noir-950 pt-16 pb-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col items-center text-center">
+      
+      <!-- Big MG Cinematic Logo Representation in Footer -->
+      <div class="flex flex-col items-center mb-6">
+        <svg class="h-16 w-auto filter drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]" viewBox="0 0 160 90" fill="none">
+          <path d="M12 76V18H28L52 56L76 18H92V76H76V34L54 70H50L28 34V76H12Z" fill="#E2E4E8" />
+          <path d="M48 68L86 10L94 15L56 74L48 68Z" fill="#FFFFFF" />
+          <path d="M135 22C122 17 106 18 94 26C80 35 74 52 78 67C82 80 96 90 114 90C128 90 142 84 148 76V48H112V60H132V68C127 74 118 78 108 77C97 76 89 68 87 58C84 46 91 34 102 29C110 25 120 25 128 29L135 22Z" fill="#D1D5DB" />
+        </svg>
+        <div class="flex items-center gap-2 mt-2">
+          <span class="w-4 h-[0.75px] bg-neutral-500"></span>
+          <span class="font-serif tracking-[0.45em] text-[11px] uppercase text-neutral-300 font-medium translate-x-[1px]">CINEMATIC</span>
+          <span class="w-4 h-[0.75px] bg-neutral-500"></span>
+        </div>
+      </div>
+
+      <p class="max-w-md font-sans text-xs text-neutral-500 font-light mb-8">
+        An elite cinematic production and post-production studio specializing in 8K anamorphic cinematography, narrative direction, and DaVinci color grading.
+      </p>
+
+      <!-- Social Channels -->
+      <div class="flex items-center gap-8 font-mono text-xs text-neutral-400 mb-8">
+        <a href="#" class="hover:text-cyan-400 transition-colors">VIMEO PRO</a>
+        <a href="#" class="hover:text-cyan-400 transition-colors">INSTAGRAM</a>
+        <a href="#" class="hover:text-cyan-400 transition-colors">YOUTUBE 8K</a>
+        <a href="#" class="hover:text-cyan-400 transition-colors">IMDb PRO</a>
+      </div>
+
+      <!-- Footer Bottom Copyright & Timecode -->
+      <div class="w-full pt-8 border-t border-neutral-900/60 flex flex-col sm:flex-row items-center justify-between font-mono text-[11px] text-neutral-600 gap-4">
+        <span>© 2026 MG CINEMATIC. ALL RIGHTS RESERVED.</span>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>STUDIO SYSTEM: ONLINE 8K DCI PIPELINE</span>
+        </div>
+        <span>MASTERED FOR 2.39:1 CINEMASCOPE</span>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Immersive 4K Showreel Modal -->
+  <div id="reel-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 sm:p-8 hidden opacity-0 transition-opacity duration-300">
+    <div class="relative w-full max-w-6xl bg-noir-950 border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+      
+      <!-- Modal Top Bar -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-800 font-mono text-xs text-neutral-400">
+        <div class="flex items-center gap-3">
+          <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+          <span class="text-white font-bold tracking-wider">MG CINEMATIC // OFFICIAL 2026 SHOWREEL</span>
+          <span class="px-2 py-0.5 rounded bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-[10px]">8K MASTER</span>
+        </div>
+        <button id="close-reel-modal" class="p-1 text-neutral-400 hover:text-white transition-colors cursor-pointer" aria-label="Close Showreel">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Video Player Wrapper (Cinematic 2.39:1 Frame) -->
+      <div class="relative aspect-cinema bg-black w-full overflow-hidden flex items-center justify-center">
+        
+        <!-- Video Element or Fallback High-Res Teaser Footage -->
+        <video id="showreel-video" class="w-full h-full object-cover" poster="https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&w=1600&q=80" loop playsinline>
+          <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" type="video/mp4">
+          Your browser does not support HTML5 video.
+        </video>
+
+        <!-- Player Controls Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30 pointer-events-none flex flex-col justify-between p-6">
+          <div class="flex justify-between items-center">
+            <span class="font-mono text-[11px] text-cyan-400 bg-black/60 px-3 py-1 rounded">2.39:1 ANAMORPHIC CUT</span>
+            <span class="font-mono text-[11px] text-neutral-400" id="video-timer">00:00 / 02:45</span>
+          </div>
+
+          <div class="pointer-events-auto flex items-center justify-between gap-4">
+            <button id="play-pause-btn" class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center hover:bg-cyan-300 transition-colors shadow-lg cursor-pointer">
+              <svg id="play-icon" class="w-5 h-5 translate-x-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="pause-icon" class="w-5 h-5 fill-current hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            
+            <!-- Video Progress Track -->
+            <div class="flex-1 h-1.5 bg-neutral-800 rounded cursor-pointer relative overflow-hidden" id="video-timeline">
+              <div id="video-progress" class="h-full bg-cyan-400 w-0 transition-all"></div>
+            </div>
+
+            <!-- Resolution Quality Badge -->
+            <div class="flex items-center gap-2 font-mono text-[11px] text-neutral-400">
+              <span class="text-white font-bold">8K RAW</span>
+              <span>•</span>
+              <button id="modal-audio-btn" class="hover:text-white">UNMUTE AUDIO</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Director Reel Notes -->
+      <div class="p-6 bg-noir-900 font-mono text-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-neutral-400 border-t border-neutral-800">
+        <div>
+          <span class="text-white font-bold">DIRECTOR'S NOTE:</span> Shot across 6 continents using ARRI Alexa 35, Cooke Anamorphic /i, and custom FPV high-speed frames.
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="px-2 py-1 bg-noir-950 border border-neutral-700 rounded text-[10px]">SOUND: DOLBY 5.1 MASTER</span>
+          <span class="px-2 py-1 bg-noir-950 border border-neutral-700 rounded text-[10px]">GRADE: DAVINCI RESOLVE</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Project Detail Modal -->
+  <div id="project-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 sm:p-8 hidden opacity-0 transition-opacity duration-300">
+    <div class="relative w-full max-w-4xl bg-noir-950 border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+      
+      <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-800 font-mono text-xs">
+        <span id="modal-category" class="text-cyan-400 uppercase tracking-widest font-bold">CASE STUDY // FEATURE FILM</span>
+        <button onclick="closeProjectModal()" class="p-1 text-neutral-400 hover:text-white cursor-pointer">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="overflow-y-auto p-6 sm:p-8 space-y-6">
+        <div class="rounded-xl overflow-hidden aspect-cinema relative border border-neutral-800">
+          <img id="modal-image" src="" alt="Project Stills" class="w-full h-full object-cover">
+          <div class="absolute bottom-3 left-3 bg-black/80 px-3 py-1 rounded text-xs font-mono text-cyan-300" id="modal-camera-tag">
+            ARRI ALEXA 35
+          </div>
+        </div>
+
+        <div>
+          <h2 id="modal-title" class="font-serif text-3xl sm:text-4xl font-bold text-white uppercase">Project Title</h2>
+          <p id="modal-desc" class="text-neutral-300 text-sm sm:text-base mt-2 leading-relaxed font-light">Project description and cinematic narrative details.</p>
+        </div>
+
+        <!-- Color Palette Swatches -->
+        <div>
+          <h4 class="font-mono text-xs uppercase text-neutral-400 tracking-wider mb-2">Primary Master Color Palette</h4>
+          <div class="flex items-center gap-3" id="modal-palette">
+            <div class="h-10 flex-1 rounded bg-[#09151e] border border-neutral-700 flex items-center justify-center text-[10px] font-mono text-neutral-400">#09151E</div>
+            <div class="h-10 flex-1 rounded bg-[#1e3d48] border border-neutral-700 flex items-center justify-center text-[10px] font-mono text-neutral-400">#1E3D48</div>
+            <div class="h-10 flex-1 rounded bg-[#e8a848] border border-neutral-700 flex items-center justify-center text-[10px] font-mono text-black font-bold">#E8A848</div>
+            <div class="h-10 flex-1 rounded bg-[#d64024] border border-neutral-700 flex items-center justify-center text-[10px] font-mono text-white">#D64024</div>
+          </div>
+        </div>
+
+        <!-- Technical Metadata -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-xl bg-noir-900 border border-neutral-800 font-mono text-xs">
+          <div>
+            <span class="text-neutral-500 block text-[10px]">ASPECT RATIO</span>
+            <span class="text-white font-bold">2.39:1 Cinemascope</span>
+          </div>
+          <div>
+            <span class="text-neutral-500 block text-[10px]">LENS PACKAGE</span>
+            <span class="text-white font-bold">Cooke Anamorphic /i</span>
+          </div>
+          <div>
+            <span class="text-neutral-500 block text-[10px]">COLOR SPACE</span>
+            <span class="text-cyan-400 font-bold">DCI-P3 HDR</span>
+          </div>
+          <div>
+            <span class="text-neutral-500 block text-[10px]">DELIVERY MASTER</span>
+            <span class="text-white font-bold">Apple ProRes 4444 XQ</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="px-6 py-4 border-t border-neutral-800 bg-noir-900 flex justify-between items-center">
+        <span class="font-mono text-xs text-neutral-400">MG CINEMATIC ARCHIVES</span>
+        <button onclick="requestEstimatedTreatment()" class="px-5 py-2 rounded bg-white text-black font-mono text-xs uppercase font-bold hover:bg-cyan-300 transition-colors cursor-pointer">
+          Inquire Similar Production
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================
+       1. CUSTOM CINEMATIC CURSOR
+       ========================================================= */
+    const cursorDot = document.getElementById('cursor-dot');
+    const cursorRing = document.getElementById('cursor-ring');
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let ringX = mouseX;
+    let ringY = mouseY;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (cursorDot) {
+        cursorDot.style.left = `${mouseX}px`;
+        cursorDot.style.top = `${mouseY}px`;
+      }
+    });
+
+    function renderCursor() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      if (cursorRing) {
+        cursorRing.style.left = `${ringX}px`;
+        cursorRing.style.top = `${ringY}px`;
+      }
+      requestAnimationFrame(renderCursor);
+    }
+    renderCursor();
+
+    // Hover magnification for clickable elements
+    document.querySelectorAll('button, a, input, select, .project-card').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        if (!cursorRing) return;
+        cursorRing.style.transform = 'translate(-50%, -50%) scale(1.6)';
+        cursorRing.style.borderColor = 'rgba(0, 242, 254, 0.8)';
+        cursorRing.style.backgroundColor = 'rgba(0, 242, 254, 0.08)';
+      });
+      el.addEventListener('mouseleave', () => {
+        if (!cursorRing) return;
+        cursorRing.style.transform = 'translate(-50%, -50%) scale(1)';
+        cursorRing.style.borderColor = 'rgba(163, 163, 163, 0.4)';
+        cursorRing.style.backgroundColor = 'transparent';
+      });
+    });
+
+    /* =========================================================
+       2. CINEMATIC LIVE TIMECODE ENGINE
+       ========================================================= */
+    const timecodeDisplay = document.getElementById('timecode-display');
+    let frames = 14;
+    let seconds = 39;
+    let minutes = 24;
+    let hours = 1;
+
+    setInterval(() => {
+      frames++;
+      if (frames >= 24) {
+        frames = 0;
+        seconds++;
+        if (seconds >= 60) {
+          seconds = 0;
+          minutes++;
+          if (minutes >= 60) {
+            minutes = 0;
+            hours++;
+          }
+        }
+      }
+      if (timecodeDisplay) {
+        const fStr = frames.toString().padStart(2, '0');
+        const sStr = seconds.toString().padStart(2, '0');
+        const mStr = minutes.toString().padStart(2, '0');
+        const hStr = hours.toString().padStart(2, '0');
+        timecodeDisplay.textContent = `${hStr}:${mStr}:${sStr}:${fStr}`;
+      }
+    }, 1000 / 24);
+
+    /* =========================================================
+       3. WEB AUDIO API - ATMOSPHERIC CINEMATIC DRONE SYNTH
+       ========================================================= */
+    let audioCtx = null;
+    let osc1 = null;
+    let osc2 = null;
+    let subOsc = null;
+    let masterGain = null;
+    let isSoundOn = false;
+
+    const audioBtn = document.getElementById('audio-toggle');
+    const audioLabel = document.getElementById('audio-label');
+    const audioDot = document.getElementById('audio-dot');
+    const audioPulse = document.getElementById('audio-pulse');
+
+    function initAudioDrone() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+
+        // Master Gain
+        masterGain = audioCtx.createGain();
+        masterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+
+        // Low-pass filter for deep cinematic dark resonance
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(140, audioCtx.currentTime);
+        filter.Q.setValueAtTime(4, audioCtx.currentTime);
+
+        // Sub Bass Oscillator (Hans Zimmer D-drone at 55Hz - A1)
+        subOsc = audioCtx.createOscillator();
+        subOsc.type = 'sine';
+        subOsc.frequency.setValueAtTime(55, audioCtx.currentTime);
+
+        // Harmonic Dark Sawtooth oscillator detuned
+        osc1 = audioCtx.createOscillator();
+        osc1.type = 'sawtooth';
+        osc1.frequency.setValueAtTime(55.4, audioCtx.currentTime);
+
+        // Second slightly detuned oscillator creating atmospheric beating
+        osc2 = audioCtx.createOscillator();
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(110.2, audioCtx.currentTime);
+
+        const oscGain = audioCtx.createGain();
+        oscGain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+
+        subOsc.connect(filter);
+        osc1.connect(oscGain);
+        osc2.connect(oscGain);
+        oscGain.connect(filter);
+        filter.connect(masterGain);
+        masterGain.connect(audioCtx.destination);
+
+        subOsc.start();
+        osc1.start();
+        osc2.start();
+      } catch (err) {
+        console.warn('Audio not available', err);
+      }
+    }
+
+    if (audioBtn) {
+      audioBtn.addEventListener('click', () => {
+        if (!audioCtx) {
+          initAudioDrone();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        isSoundOn = !isSoundOn;
+
+        if (isSoundOn && masterGain) {
+          masterGain.gain.setTargetAtTime(0.25, audioCtx.currentTime, 1.2);
+          audioLabel.textContent = 'SOUNDSCAPE: ON';
+          audioDot.classList.replace('bg-neutral-600', 'bg-cyan-400');
+          audioPulse.classList.replace('opacity-0', 'opacity-100');
+        } else if (masterGain) {
+          masterGain.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.4);
+          audioLabel.textContent = 'SOUNDSCAPE: OFF';
+          audioDot.classList.replace('bg-cyan-400', 'bg-neutral-600');
+          audioPulse.classList.replace('opacity-100', 'opacity-0');
+        }
+      });
+    }
+
+    /* =========================================================
+       4. HERO CANVAS DUST PARTICLES & ANAMORPHIC FLARES
+       ========================================================= */
+    const canvas = document.getElementById('cinema-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      const particleCount = 45;
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2 + 0.4,
+          speedY: -(Math.random() * 0.45 + 0.1),
+          speedX: (Math.random() - 0.5) * 0.25,
+          alpha: Math.random() * 0.6 + 0.1,
+          color: Math.random() > 0.3 ? 'rgba(255, 255, 255,' : 'rgba(0, 242, 254,'
+        });
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Soft Anamorphic subtle lens streak line
+        const gradient = ctx.createLinearGradient(0, canvas.height * 0.45, canvas.width, canvas.height * 0.45);
+        gradient.addColorStop(0, 'rgba(0, 242, 254, 0)');
+        gradient.addColorStop(0.5, 'rgba(0, 242, 254, 0.04)');
+        gradient.addColorStop(1, 'rgba(245, 158, 11, 0)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, canvas.height * 0.45 - 2, canvas.width, 4);
+
+        // Floating Dust
+        particles.forEach(p => {
+          p.y += p.speedY;
+          p.x += p.speedX;
+
+          if (p.y < 0) {
+            p.y = canvas.height;
+            p.x = Math.random() * canvas.width;
+          }
+          if (p.x < 0) p.x = canvas.width;
+          if (p.x > canvas.width) p.x = 0;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = `${p.color} ${p.alpha})`;
+          ctx.fill();
+        });
+
+        requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+    }
+
+    /* =========================================================
+       5. BEFORE / AFTER COLOR GRADE SLIDER INTERACTION
+       ========================================================= */
+    const gradeContainer = document.getElementById('grade-container');
+    const gradeOverlay = document.getElementById('grade-overlay');
+    const sliderHandle = document.getElementById('slider-handle');
+    let isSliding = false;
+
+    function updateSlider(clientX) {
+      if (!gradeContainer || !gradeOverlay || !sliderHandle) return;
+      const rect = gradeContainer.getBoundingClientRect();
+      let pos = (clientX - rect.left) / rect.width;
+      if (pos < 0.05) pos = 0.05;
+      if (pos > 0.95) pos = 0.95;
+
+      const percentage = pos * 100;
+      sliderHandle.style.left = `${percentage}%`;
+      // Inset: top, right, bottom, left
+      gradeOverlay.style.clipPath = `inset(0 0 0 ${percentage}%)`;
+    }
+
+    if (gradeContainer) {
+      gradeContainer.addEventListener('mousedown', (e) => {
+        isSliding = true;
+        updateSlider(e.clientX);
+      });
+      window.addEventListener('mouseup', () => {
+        isSliding = false;
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (!isSliding) return;
+        updateSlider(e.clientX);
+      });
+
+      // Touch events for mobile responsiveness
+      gradeContainer.addEventListener('touchstart', (e) => {
+        isSliding = true;
+        if (e.touches[0]) updateSlider(e.touches[0].clientX);
+      });
+      window.addEventListener('touchend', () => {
+        isSliding = false;
+      });
+      window.addEventListener('touchmove', (e) => {
+        if (!isSliding) return;
+        if (e.touches[0]) updateSlider(e.touches[0].clientX);
+      });
+    }
+
+    /* =========================================================
+       6. PORTFOLIO FILTERING
+       ========================================================= */
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+          b.classList.remove('active', 'border-cyan-400/80', 'bg-cyan-400/10', 'text-cyan-300');
+          b.classList.add('border-neutral-800', 'bg-noir-900', 'text-neutral-400');
+        });
+
+        btn.classList.add('active', 'border-cyan-400/80', 'bg-cyan-400/10', 'text-cyan-300');
+        btn.classList.remove('border-neutral-800', 'bg-noir-900', 'text-neutral-400');
+
+        const filter = btn.getAttribute('data-filter');
+
+        projectCards.forEach(card => {
+          const category = card.getAttribute('data-category');
+          if (filter === 'all' || category === filter) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    /* =========================================================
+       7. PRODUCTION BUDGET ESTIMATOR LOGIC
+       ========================================================= */
+    const estType = document.getElementById('est-type');
+    const estDays = document.getElementById('est-days');
+    const daysVal = document.getElementById('days-val');
+    const estCamera = document.getElementById('est-camera');
+    const estPost = document.getElementById('est-post');
+    const calculatedPrice = document.getElementById('calculated-price');
+    const usdPrice = document.getElementById('usd-price');
+
+    function calculateEstimate() {
+      if (!estType || !estDays || !estCamera || !estPost) return;
+      const baseCost = parseInt(estType.selectedOptions[0].getAttribute('data-base')) || 250000;
+      const days = parseInt(estDays.value) || 1;
+      const cameraPerDay = parseInt(estCamera.selectedOptions[0].getAttribute('data-cost')) || 50000;
+      const postCost = parseInt(estPost.selectedOptions[0].getAttribute('data-cost')) || 65000;
+
+      daysVal.textContent = `${days} Shoot Day${days > 1 ? 's' : ''}`;
+
+      // Formula: Base + (CameraPerDay * days) + PostCost + (DayMultiplier * CrewExpense)
+      const crewPerDay = 35000;
+      const totalINR = baseCost + (cameraPerDay * days) + (crewPerDay * (days - 1)) + postCost;
+      const totalUSD = Math.round(totalINR / 83.5);
+
+      calculatedPrice.textContent = `₹ ${totalINR.toLocaleString('en-IN')}`;
+      usdPrice.textContent = `$${totalUSD.toLocaleString('en-US')} USD`;
+    }
+
+    if (estType && estDays && estCamera && estPost) {
+      estType.addEventListener('change', calculateEstimate);
+      estDays.addEventListener('input', calculateEstimate);
+      estCamera.addEventListener('change', calculateEstimate);
+      estPost.addEventListener('change', calculateEstimate);
+      calculateEstimate();
+    }
+
+    function requestEstimatedTreatment() {
+      const contactSection = document.getElementById('contact');
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth' });
+      }
+      closeProjectModal();
+    }
+
+    /* =========================================================
+       8. SHOWREEL MODAL CONTROLS
+       ========================================================= */
+    const openReelBtn = document.getElementById('open-reel-modal');
+    const closeReelBtn = document.getElementById('close-reel-modal');
+    const reelModal = document.getElementById('reel-modal');
+    const showreelVideo = document.getElementById('showreel-video');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+    const videoTimeline = document.getElementById('video-timeline');
+    const videoProgress = document.getElementById('video-progress');
+    const videoTimer = document.getElementById('video-timer');
+    const modalAudioBtn = document.getElementById('modal-audio-btn');
+
+    function openReel() {
+      if (!reelModal || !showreelVideo) return;
+      reelModal.classList.remove('hidden');
+      setTimeout(() => reelModal.classList.remove('opacity-0'), 10);
+      showreelVideo.play().catch(() => {});
+      if (playIcon && pauseIcon) {
+        playIcon.classList.add('hidden');
+        pauseIcon.classList.remove('hidden');
+      }
+    }
+
+    function closeReel() {
+      if (!reelModal || !showreelVideo) return;
+      reelModal.classList.add('opacity-0');
+      setTimeout(() => {
+        reelModal.classList.add('hidden');
+        showreelVideo.pause();
+      }, 300);
+    }
+
+    if (openReelBtn) openReelBtn.addEventListener('click', openReel);
+    if (closeReelBtn) closeReelBtn.addEventListener('click', closeReel);
+
+    if (playPauseBtn && showreelVideo) {
+      playPauseBtn.addEventListener('click', () => {
+        if (showreelVideo.paused) {
+          showreelVideo.play();
+          playIcon.classList.add('hidden');
+          pauseIcon.classList.remove('hidden');
+        } else {
+          showreelVideo.pause();
+          playIcon.classList.remove('hidden');
+          pauseIcon.classList.add('hidden');
+        }
+      });
+
+      showreelVideo.addEventListener('timeupdate', () => {
+        const percent = (showreelVideo.currentTime / showreelVideo.duration) * 100;
+        if (videoProgress) videoProgress.style.width = `${percent}%`;
+
+        const curM = Math.floor(showreelVideo.currentTime / 60).toString().padStart(2, '0');
+        const curS = Math.floor(showreelVideo.currentTime % 60).toString().padStart(2, '0');
+        const durM = Math.floor((showreelVideo.duration || 165) / 60).toString().padStart(2, '0');
+        const durS = Math.floor((showreelVideo.duration || 165) % 60).toString().padStart(2, '0');
+        if (videoTimer) videoTimer.textContent = `${curM}:${curS} / ${durM}:${durS}`;
+      });
+    }
+
+    if (modalAudioBtn && showreelVideo) {
+      modalAudioBtn.addEventListener('click', () => {
+        showreelVideo.muted = !showreelVideo.muted;
+        modalAudioBtn.textContent = showreelVideo.muted ? 'UNMUTE AUDIO' : 'MUTE AUDIO';
+      });
+    }
+
+    /* =========================================================
+       9. PROJECT DETAIL MODAL DATA & HANDLERS
+       ========================================================= */
+    const projectsData = {
+      'the-chronicle-of-noir': {
+        title: 'The Chronicles of Noir',
+        category: 'CASE STUDY // FEATURE FILM (CANNES NOMINEE)',
+        image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1600&q=80',
+        desc: 'Shot entirely in anamorphic 2.39:1 on the ARRI Alexa 35 with vintage Cooke anamorphic primes. Mastered in 4K DCI HDR with bespoke 35mm grain integration and shadow tone preservation.',
+        camera: 'ARRI ALEXA 35 • COOKE ANAMORPHIC /i 2X',
+        palette: ['#0a0d12', '#16222f', '#c98a42', '#8c2e24']
+      },
+      'velocita-supercar-spec': {
+        title: 'Velocità // Hyper-Spec Commercial',
+        category: 'CASE STUDY // COMMERCIAL TVC',
+        image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1600&q=80',
+        desc: 'High-speed automotive campaign captured on Italian coastal switchbacks using custom motorized chase vehicle arm rigs and RED V-Raptor 8K VV at 120fps.',
+        camera: 'RED V-RAPTOR 8K VV • ULTRA PRIME T1.3',
+        palette: ['#0f0f11', '#2c2d30', '#00f2fe', '#e11d48']
+      },
+      'midnight-mirage': {
+        title: 'Midnight Mirage Music Video',
+        category: 'CASE STUDY // MUSIC VIDEO (22M+ STREAMS)',
+        image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1600&q=80',
+        desc: 'Futuristic neo-noir music visualizer exploring anamorphic lens flares, heavy practical atmospheric smoke, and vibrant chromatic split lighting.',
+        camera: 'SONY VENICE 2 • ATLAS ORION 2X',
+        palette: ['#08040d', '#2b1055', '#ec4899', '#38bdf8']
+      },
+      'alps-kinetic-fpv': {
+        title: 'Alpine Descent Kinetic FPV',
+        category: 'CASE STUDY // AERIAL CINEMATOGRAPHY',
+        image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1600&q=80',
+        desc: 'Record-setting extreme proximity mountain dive captured with a heavy-lift cinema drone carrying a stripped-down RED cinema camera through icy ridges.',
+        camera: 'RED KOMODO 6K • LAOWA 9MM ZERO-D',
+        palette: ['#071018', '#1a3344', '#7dd3fc', '#e2e8f0']
+      },
+      'solitary-echoes': {
+        title: 'Solitary Echoes Narrative',
+        category: 'CASE STUDY // INDEPENDENT DRAMA',
+        image: 'https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&w=1600&q=80',
+        desc: 'Poetic atmospheric piece shot on the black sand volcanic shores of Iceland. Natural twilight lighting pushed to the limits of ARRI LF Dual Gain Architecture.',
+        camera: 'ARRI ALEXA MINI LF • ARRI MASTER PRIMES',
+        palette: ['#0a0c0e', '#1c242b', '#8b9bb4', '#d89b65']
+      },
+      'haute-horlogerie': {
+        title: 'Chronometrie // Swiss Precision',
+        category: 'CASE STUDY // LUXURY MACRO CAMPAIGN',
+        image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1600&q=80',
+        desc: 'Precision microscopic watchmaking film shot at 1000 frames-per-second to capture tourbillon oscillation and escapement geometry under robotic motion control.',
+        camera: 'PHANTOM FLEX 4K • ZEISS MASTER MACRO 100MM',
+        palette: ['#0c0b08', '#2d281e', '#e6c670', '#ffffff']
+      }
+    };
+
+    const projectModal = document.getElementById('project-modal');
+    const modalCategory = document.getElementById('modal-category');
+    const modalImage = document.getElementById('modal-image');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalCameraTag = document.getElementById('modal-camera-tag');
+    const modalPalette = document.getElementById('modal-palette');
+
+    function openProjectModal(key) {
+      const data = projectsData[key];
+      if (!data || !projectModal) return;
+
+      modalCategory.textContent = data.category;
+      modalImage.src = data.image;
+      modalTitle.textContent = data.title;
+      modalDesc.textContent = data.desc;
+      modalCameraTag.textContent = data.camera;
+
+      // Render swatches
+      if (modalPalette) {
+        modalPalette.innerHTML = '';
+        data.palette.forEach(hex => {
+          const swatch = document.createElement('div');
+          swatch.className = 'h-10 flex-1 rounded border border-neutral-700 flex items-center justify-center text-[10px] font-mono font-bold';
+          swatch.style.backgroundColor = hex;
+          swatch.style.color = hex === '#ffffff' || hex === '#e6c670' ? '#000000' : '#ffffff';
+          swatch.textContent = hex.toUpperCase();
+          modalPalette.appendChild(swatch);
+        });
+      }
+
+      projectModal.classList.remove('hidden');
+      setTimeout(() => projectModal.classList.remove('opacity-0'), 10);
+    }
+
+    function closeProjectModal() {
+      if (!projectModal) return;
+      projectModal.classList.add('opacity-0');
+      setTimeout(() => projectModal.classList.add('hidden'), 300);
+    }
+
+    /* =========================================================
+       10. FORM SUBMISSION WITHOUT ALERT
+       ========================================================= */
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const toast = document.getElementById('form-toast');
+      if (toast) {
+        toast.classList.remove('hidden');
+        setTimeout(() => {
+          toast.classList.add('hidden');
+        }, 6000);
+      }
+      e.target.reset();
+    }
+
+    // Mobile nav toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+      });
+    }
+  </script>
+
+</body>
+</html>
